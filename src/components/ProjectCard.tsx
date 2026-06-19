@@ -13,6 +13,14 @@ interface Props {
   targetScale: number
 }
 
+function hostOf(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '')
+  } catch {
+    return ''
+  }
+}
+
 /** Carte projet à empilement collant (sticky stacking, repris du template Jack). */
 export default function ProjectCard({ project, i, progress, range, targetScale }: Props) {
   const { lang } = useLanguage()
@@ -60,36 +68,56 @@ export default function ProjectCard({ project, i, progress, range, targetScale }
           </div>
         </div>
 
-        {/* Grille de mockups */}
-        <div className="mt-5 md:mt-7 grid grid-cols-1 md:grid-cols-[40%_1fr] gap-3 md:gap-4">
-          <div className="flex flex-col gap-3 md:gap-4">
-            <ProjectMock
-              variant={project.variant}
-              accent={project.accent}
-              accent2={project.accent2}
-              part="widgetA"
-              className="w-full rounded-[22px] sm:rounded-[30px] md:rounded-[40px]"
-              style={{ height: 'clamp(120px,14vw,200px)' }}
-            />
-            <ProjectMock
-              variant={project.variant}
-              accent={project.accent}
-              accent2={project.accent2}
-              part="widgetB"
-              className="w-full rounded-[22px] sm:rounded-[30px] md:rounded-[40px]"
-              style={{ height: 'clamp(150px,20vw,300px)' }}
+        {/* Visuel : vraie capture (cadre navigateur) ou mockup SVG en fallback */}
+        {project.screenshot ? (
+          <div className="mt-5 md:mt-7 overflow-hidden rounded-[18px] sm:rounded-[26px] md:rounded-[32px] border border-[#D7E2EA]/15">
+            <div className="flex items-center gap-2 border-b border-[#D7E2EA]/10 bg-white/[0.04] px-4 py-3">
+              <span className="h-3 w-3 rounded-full" style={{ background: '#ff5f57' }} />
+              <span className="h-3 w-3 rounded-full" style={{ background: '#febc2e' }} />
+              <span className="h-3 w-3 rounded-full" style={{ background: '#28c840' }} />
+              {hostOf(project.url) && (
+                <span className="ml-3 truncate text-xs text-[#D7E2EA]/40">{hostOf(project.url)}</span>
+              )}
+            </div>
+            <img
+              src={project.screenshot}
+              alt={`${project.name} — aperçu du site`}
+              loading="lazy"
+              className="block w-full object-cover object-top"
+              style={{ height: 'clamp(240px,36vw,540px)' }}
             />
           </div>
-          <ProjectMock
-            variant={project.variant}
-            accent={project.accent}
-            accent2={project.accent2}
-            part="hero"
-            label={project.name}
-            className="w-full rounded-[22px] sm:rounded-[30px] md:rounded-[40px]"
-            style={{ height: '100%', minHeight: 'clamp(290px,34vw,520px)' }}
-          />
-        </div>
+        ) : (
+          <div className="mt-5 md:mt-7 grid grid-cols-1 gap-3 md:grid-cols-[40%_1fr] md:gap-4">
+            <div className="flex flex-col gap-3 md:gap-4">
+              <ProjectMock
+                variant={project.variant}
+                accent={project.accent}
+                accent2={project.accent2}
+                part="widgetA"
+                className="w-full rounded-[22px] sm:rounded-[30px] md:rounded-[40px]"
+                style={{ height: 'clamp(120px,14vw,200px)' }}
+              />
+              <ProjectMock
+                variant={project.variant}
+                accent={project.accent}
+                accent2={project.accent2}
+                part="widgetB"
+                className="w-full rounded-[22px] sm:rounded-[30px] md:rounded-[40px]"
+                style={{ height: 'clamp(150px,20vw,300px)' }}
+              />
+            </div>
+            <ProjectMock
+              variant={project.variant}
+              accent={project.accent}
+              accent2={project.accent2}
+              part="hero"
+              label={project.name}
+              className="w-full rounded-[22px] sm:rounded-[30px] md:rounded-[40px]"
+              style={{ height: '100%', minHeight: 'clamp(290px,34vw,520px)' }}
+            />
+          </div>
+        )}
       </motion.div>
     </div>
   )

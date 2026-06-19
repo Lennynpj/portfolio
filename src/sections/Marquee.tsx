@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import ProjectMock from '../components/ProjectMock'
-import type { MockVariant } from '../data/projects'
+import { projects, type MockVariant } from '../data/projects'
 
 const SPECS: { variant: MockVariant; accent: string; accent2: string }[] = [
   { variant: 'saas', accent: '#2EA7A0', accent2: '#1F6F8B' },
@@ -10,22 +10,53 @@ const SPECS: { variant: MockVariant; accent: string; accent2: string }[] = [
   { variant: 'landing', accent: '#7621B0', accent2: '#B600A8' },
 ]
 
+/** Captures réelles disponibles, indexées par nom de projet. */
+const SHOT: Record<string, string> = Object.fromEntries(
+  projects.filter((p) => p.screenshot).map((p) => [p.name, p.screenshot as string]),
+)
+
+const TILE = 'shrink-0 w-[300px] h-[195px] sm:w-[420px] sm:h-[270px] rounded-2xl'
+
 const ROW1 = [
   'MIA CV',
   'TipsYou',
   'HumanONG',
   'Get5Stars',
   'Steven Coaching',
+  'EventPics',
   'Web App',
   'SaaS',
   'IA',
   'Mobile',
   'Fintech',
-  'E-commerce',
 ]
-const ROW2 = ['Branding', 'UX/UI', 'Dashboard', 'Paiements', 'Chatbot', 'Audit', 'Vitrine', 'API', 'Design', 'Conversion']
+const ROW2 = [
+  'EventPics',
+  'TipsYou',
+  'Branding',
+  'Get5Stars',
+  'UX/UI',
+  'Steven Coaching',
+  'Dashboard',
+  'Paiements',
+  'API',
+  'Conversion',
+]
 
 function Tile({ label, seed }: { label: string; seed: number }) {
+  const shot = SHOT[label]
+  if (shot) {
+    // Vraie capture du site (cadre simple + label en surimpression)
+    return (
+      <div className={`relative overflow-hidden border border-[#D7E2EA]/10 ${TILE}`}>
+        <img src={shot} alt={label} loading="lazy" className="h-full w-full object-cover object-top" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/75 to-transparent" />
+        <span className="absolute bottom-3 left-3 font-medium uppercase tracking-widest text-[0.6rem] text-[#D7E2EA] sm:text-xs">
+          {label}
+        </span>
+      </div>
+    )
+  }
   const spec = SPECS[seed % SPECS.length]
   return (
     <ProjectMock
@@ -34,7 +65,7 @@ function Tile({ label, seed }: { label: string; seed: number }) {
       accent2={spec.accent2}
       part={seed % 2 === 0 ? 'widgetA' : 'widgetB'}
       label={label}
-      className="shrink-0 w-[300px] h-[195px] sm:w-[420px] sm:h-[270px] rounded-2xl"
+      className={TILE}
     />
   )
 }

@@ -1,6 +1,6 @@
 import type { L10n } from '../lib/l10n'
 
-/** Type de mockup SVG affiché pour le projet. */
+/** Type de mockup SVG affiché en fallback (si pas de screenshot). */
 export type MockVariant = 'ai' | 'fintech' | 'saas' | 'reviews' | 'landing'
 
 export interface Project {
@@ -12,10 +12,12 @@ export interface Project {
   pitch: L10n
   result: L10n
   url: string
-  /** Habillage visuel (mockup SVG en attendant les vrais visuels). */
+  /** Habillage visuel SVG (fallback quand pas de screenshot). */
   variant: MockVariant
   accent: string
   accent2: string
+  /** Capture réelle du site (sinon → mockup SVG). */
+  screenshot?: string
 }
 
 export const projects: Project[] = [
@@ -29,10 +31,11 @@ export const projects: Project[] = [
       en: 'AI-powered CV optimization and job-offer analysis platform.',
     },
     result: { fr: '+3,4× de passage ATS', en: '+3.4× ATS pass rate' },
-    url: '#',
+    url: 'https://mia-cv.com/fr',
     variant: 'ai',
     accent: '#B600A8',
     accent2: '#7621B0',
+    // pas de screenshot (SPA Next.js qui ne se rend pas en headless) → mockup SVG
   },
   {
     id: 'tipsyou',
@@ -44,10 +47,11 @@ export const projects: Project[] = [
       en: 'Tipping and creator-support app — mobile, web and payments.',
     },
     result: { fr: 'Interface fluide à 60 fps', en: 'Silky 60 fps UI' },
-    url: '#',
+    url: 'https://www.thetipsyou.fr/fr',
     variant: 'fintech',
     accent: '#BE4C00',
     accent2: '#B600A8',
+    screenshot: '/projects/tipsyou.jpg',
   },
   {
     id: 'humanong',
@@ -63,6 +67,7 @@ export const projects: Project[] = [
     variant: 'saas',
     accent: '#2EA7A0',
     accent2: '#1F6F8B',
+    // pas d'URL publique → mockup SVG
   },
   {
     id: 'get5stars',
@@ -70,14 +75,15 @@ export const projects: Project[] = [
     name: 'Get5Stars',
     category: { fr: 'SaaS B2B', en: 'B2B SaaS' },
     pitch: {
-      fr: "Plateforme de collecte d'avis clients post-achat.",
-      en: 'Post-purchase customer review collection platform.',
+      fr: "Plateforme de collecte d'avis clients en pilote automatique.",
+      en: 'Automated customer review collection platform.',
     },
     result: { fr: 'Note moyenne portée à 4,9★', en: 'Average rating lifted to 4.9★' },
-    url: '#',
+    url: 'https://www.get5stars.app/fr',
     variant: 'reviews',
     accent: '#E5A100',
     accent2: '#BE4C00',
+    screenshot: '/projects/get5stars.jpg',
   },
   {
     id: 'steven-coaching',
@@ -85,13 +91,30 @@ export const projects: Project[] = [
     name: 'Steven Coaching',
     category: { fr: 'Coaching', en: 'Coaching' },
     pitch: {
-      fr: 'Site vitrine pour un coach sportif, rapide et optimisé.',
-      en: 'Showcase website for a fitness coach — fast and optimized.',
+      fr: 'Site vitrine pour un coach sportif (méthode IKIGAI), rapide et optimisé.',
+      en: 'Showcase website for a fitness coach (IKIGAI method) — fast and optimized.',
     },
     result: { fr: 'Score Lighthouse 98', en: 'Lighthouse score 98' },
-    url: '#',
+    url: 'https://steven-coaching.fr/',
     variant: 'landing',
     accent: '#7621B0',
     accent2: '#B600A8',
+    screenshot: '/projects/steven-coaching.jpg',
+  },
+  {
+    id: 'eventpics',
+    number: '06',
+    name: 'EventPics',
+    category: { fr: 'IA & Événementiel', en: 'AI & Events' },
+    pitch: {
+      fr: "Application IA qui livre à chaque invité ses photos d'événement à partir d'un simple selfie.",
+      en: 'AI app that delivers each guest their event photos from a single selfie.',
+    },
+    result: { fr: 'Photos livrées en un selfie', en: 'Photos delivered in one selfie' },
+    url: 'https://eventpics.fr/',
+    variant: 'ai',
+    accent: '#5B6CF0',
+    accent2: '#9333EA',
+    screenshot: '/projects/eventpics.jpg',
   },
 ]
