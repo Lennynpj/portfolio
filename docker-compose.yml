@@ -1,0 +1,32 @@
+services:
+  portfolio:
+    build: .
+    image: humanx-portfolio:latest
+    container_name: humanx-portfolio
+    restart: unless-stopped
+    # Le conteneur sert le site sur le port 80 en interne.
+    # On l'expose sur 8088 du VPS → c'est ce port que ton reverse proxy
+    # (Caddy / Nginx Proxy Manager / nginx hôte) doit router vers le sous-domaine.
+    # Change 8088 s'il est déjà pris.
+    ports:
+      - "8088:80"
+
+    # ─────────────────────────────────────────────────────────────────────
+    # Variante "proxy en Docker" (Traefik, Nginx Proxy Manager sur réseau partagé)
+    # Décommente le bloc networks (ici + en bas) et retire le mapping ports ci-dessus :
+    # le proxy joindra alors le conteneur par son nom (humanx-portfolio:80).
+    #
+    # networks:
+    #   - proxy
+    # labels:
+    #   # Exemple Traefik (adapte entrypoint/certresolver aux tiens) :
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.portfolio.rule=Host(`portfolio.humanx-group.com`)"
+    #   - "traefik.http.routers.portfolio.entrypoints=websecure"
+    #   - "traefik.http.routers.portfolio.tls.certresolver=letsencrypt"
+    #   - "traefik.http.services.portfolio.loadbalancer.server.port=80"
+    # ─────────────────────────────────────────────────────────────────────
+
+# networks:
+#   proxy:
+#     external: true
