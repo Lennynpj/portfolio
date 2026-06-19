@@ -64,7 +64,7 @@ export default function ProjectCard({ project, i, progress, range, targetScale }
             >
               {pick(project.result, lang)}
             </span>
-            <LiveProjectButton href={project.url} />
+            {project.url && project.url !== '#' && <LiveProjectButton href={project.url} />}
           </div>
         </div>
 
@@ -84,13 +84,13 @@ export default function ProjectCard({ project, i, progress, range, targetScale }
               alt={`${project.name} — aperçu du site`}
               loading="lazy"
               className="block w-full object-cover object-top"
-              style={{ height: 'clamp(240px,36vw,540px)' }}
+              style={{ height: 'min(46vh, clamp(240px,36vw,540px))' }}
             />
           </div>
         ) : (
           /* Hauteur fixe (identique à la capture) → les mockups remplissent la boîte
              au lieu de dicter sa hauteur, donc la carte ne déborde plus. */
-          <div className="mt-5 md:mt-7 overflow-hidden" style={{ height: 'clamp(240px,36vw,540px)' }}>
+          <div className="mt-5 md:mt-7 overflow-hidden" style={{ height: 'min(46vh, clamp(240px,36vw,540px))' }}>
             <div className="flex h-full gap-3 md:gap-4">
               {/* Colonne de widgets — masquée en mobile pour ne pas dépasser */}
               <div className="hidden md:flex md:w-[38%] h-full flex-col gap-4">

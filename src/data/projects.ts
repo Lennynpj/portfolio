@@ -35,7 +35,7 @@ export const projects: Project[] = [
     variant: 'ai',
     accent: '#B600A8',
     accent2: '#7621B0',
-    // pas de screenshot (SPA Next.js qui ne se rend pas en headless) → mockup SVG
+    screenshot: '/projects/mia-cv.jpg',
   },
   {
     id: 'tipsyou',
@@ -67,7 +67,7 @@ export const projects: Project[] = [
     variant: 'saas',
     accent: '#2EA7A0',
     accent2: '#1F6F8B',
-    // pas d'URL publique → mockup SVG
+    screenshot: '/projects/humanong.jpg',
   },
   {
     id: 'get5stars',

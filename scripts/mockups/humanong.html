@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440, initial-scale=1" />
+<title>HumanONG — Tableau de bord</title>
+<style>
+  :root{
+    --bg:#0a0e0f; --panel:#111819; --panel2:#0e1415; --line:#1f2a2c;
+    --teal:#2EA7A0; --blue:#1F6F8B; --text:#e8eef0; --mut:#7f8d91; --mut2:#5a686c;
+    --good:#37c79a; --gold:#E5A100;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  body{width:1440px;height:900px;overflow:hidden;display:flex}
+  /* Sidebar */
+  .side{width:248px;flex:none;background:var(--panel2);border-right:1px solid var(--line);padding:26px 18px;display:flex;flex-direction:column;gap:6px}
+  .brand{display:flex;align-items:center;gap:11px;padding:0 8px 22px;margin-bottom:8px;border-bottom:1px solid var(--line)}
+  .logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--teal),var(--blue));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;color:#04110f}
+  .brand b{font-size:18px;letter-spacing:.2px}
+  .brand small{display:block;color:var(--mut2);font-size:11px;font-weight:500;letter-spacing:.4px;text-transform:uppercase}
+  .nav{display:flex;flex-direction:column;gap:3px;margin-top:14px}
+  .nav a{display:flex;align-items:center;gap:13px;padding:11px 13px;border-radius:11px;color:var(--mut);font-size:14.5px;font-weight:500;text-decoration:none}
+  .nav a.on{background:linear-gradient(90deg,rgba(46,167,160,.16),rgba(31,111,139,.05));color:#eafffb;box-shadow:inset 0 0 0 1px rgba(46,167,160,.22)}
+  .nav a .ic{width:18px;height:18px;opacity:.9}
+  .nav .lbl{color:var(--mut2);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:18px 13px 6px}
+  .side .foot{margin-top:auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+  .side .foot p{font-size:12.5px;color:var(--mut)}
+  .side .foot .bar{height:7px;border-radius:5px;background:#1b2426;margin:10px 0 7px;overflow:hidden}
+  .side .foot .bar i{display:block;height:100%;width:72%;background:linear-gradient(90deg,var(--teal),var(--blue))}
+  .side .foot small{color:var(--mut2);font-size:11px}
+  /* Main */
+  .main{flex:1;display:flex;flex-direction:column;min-width:0}
+  .top{height:68px;flex:none;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:18px;padding:0 30px}
+  .search{flex:1;max-width:420px;background:var(--panel);border:1px solid var(--line);border-radius:11px;height:40px;display:flex;align-items:center;gap:10px;padding:0 14px;color:var(--mut2);font-size:14px}
+  .top .sp{flex:1}
+  .pill{height:40px;border:1px solid var(--line);background:var(--panel);border-radius:11px;display:flex;align-items:center;gap:9px;padding:0 14px;font-size:13.5px;color:var(--mut)}
+  .ava{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#2EA7A0,#1F6F8B);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#04110f}
+  .who b{font-size:13.5px;display:block;line-height:1.1}
+  .who small{font-size:11.5px;color:var(--mut2)}
+  .body{padding:26px 30px;overflow:hidden}
+  .head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:22px}
+  .head h1{font-size:25px;font-weight:800;letter-spacing:-.3px}
+  .head p{color:var(--mut);font-size:13.5px;margin-top:5px}
+  .btn{height:42px;padding:0 20px;border-radius:11px;background:linear-gradient(135deg,var(--teal),var(--blue));color:#04110f;font-weight:700;font-size:14px;display:flex;align-items:center;gap:9px;border:none}
+  /* KPI */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:18px}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .kpi .t{color:var(--mut);font-size:12.5px;font-weight:600;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+  .kpi .t .d{width:30px;height:30px;border-radius:9px;background:rgba(46,167,160,.12);display:flex;align-items:center;justify-content:center}
+  .kpi .v{font-size:28px;font-weight:800;margin:13px 0 6px;letter-spacing:-.5px}
+  .kpi .c{font-size:12.5px;font-weight:700;color:var(--good)}
+  .kpi .c.b{color:var(--blue)}
+  .kpi.hi{background:linear-gradient(140deg,rgba(46,167,160,.16),rgba(31,111,139,.06));border-color:rgba(46,167,160,.3)}
+  /* grid */
+  .grid{display:grid;grid-template-columns:1.65fr 1fr;gap:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+  .card h3{font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
+  .card h3 span{color:var(--mut2);font-size:12px;font-weight:600}
+  .legend{display:flex;gap:16px;margin-top:14px}
+  .legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:7px;vertical-align:middle}
+  .legend span{font-size:12.5px;color:var(--mut)}
+  .legend b{color:var(--text)}
+  .donut-wrap{display:flex;align-items:center;gap:14px;margin-top:8px}
+  .donut-c{position:relative}
+  .donut-c .ctr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .donut-c .ctr b{font-size:26px;font-weight:800}
+  .donut-c .ctr small{font-size:11px;color:var(--mut2)}
+  .dl{display:flex;flex-direction:column;gap:11px;flex:1}
+  .dl .row{display:flex;align-items:center;gap:10px;font-size:13px}
+  .dl .row b{margin-left:auto;font-weight:700}
+  /* table */
+  table{width:100%;border-collapse:collapse;margin-top:6px}
+  th{text-align:left;color:var(--mut2);font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:10px 8px;border-bottom:1px solid var(--line)}
+  td{padding:11px 8px;border-bottom:1px solid var(--line);font-size:13.5px}
+  tr:last-child td{border-bottom:none}
+  .donor{display:flex;align-items:center;gap:11px}
+  .da{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#04110f}
+  .donor small{display:block;color:var(--mut2);font-size:11.5px}
+  .tag{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:20px}
+  .tag.m{background:rgba(46,167,160,.14);color:#5fe6da}
+  .tag.p{background:rgba(229,161,0,.14);color:var(--gold)}
+  .stat{font-weight:700}
+  .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--good);margin-right:7px}
+</style>
+</head>
+<body>
+  <aside class="side">
+    <div class="brand">
+      <div class="logo">H</div>
+      <div><b>HumanONG</b><small>Donor CRM</small></div>
+    </div>
+    <nav class="nav">
+      <a class="on"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#5fe6da" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Tableau de bord</a>
+      <a><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><path d="M16 6.5a3 3 0 0 1 0 5.6M18 19a5.5 5.5 0 0 0-3-4.9"/></svg>Donateurs</a>
+      <a><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/><path d="M9 19v-5h6v5"/></svg>Campagnes</a>
+      <a><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 8.6a5 5 0 0 0-8.8-1.9A5 5 0 0 0 3.2 8.6c0 3.5 4.3 6.6 8.8 10 4.5-3.4 8.8-6.5 8.8-10Z"/></svg>Dons</a>
+      <a><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3h7l4 4v14H7z" /><path d="M14 3v4h4"/><path d="M10 13h5M10 17h5"/></svg>Reçus fiscaux</a>
+      <div class="lbl">Analyse</div>
+      <a><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 16l3.5-4 3 2.5L20 8"/></svg>Rapports</a>
+      <a><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.6-2-3.4-2.4 1a7 7 0 0 0-1.7-1l-.4-2.5h-4l-.4 2.5a7 7 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7 7 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7 7 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6c.1-.3.1-.7.1-1Z"/></svg>Paramètres</a>
+    </nav>
+    <div class="foot">
+      <p><b>Objectif annuel</b></p>
+      <div class="bar"><i></i></div>
+      <small>540 200 € sur 750 000 €</small>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <div class="search">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+        Rechercher un donateur, une campagne…
+      </div>
+      <div class="sp"></div>
+      <div class="pill"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10.5 21a2 2 0 0 0 3 0"/></svg>Alertes</div>
+      <div class="pill"><div class="ava">AL</div><div class="who"><b>Association Lumière</b><small>Admin</small></div></div>
+    </div>
+
+    <div class="body">
+      <div class="head">
+        <div>
+          <h1>Tableau de bord</h1>
+          <p>Vue d'ensemble de la collecte — Juin 2026</p>
+        </div>
+        <button class="btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#04110f" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>Nouvelle campagne</button>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi">
+          <div class="t"><span class="d"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5fe6da" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>Dons ce mois</div>
+          <div class="v">48 920 €</div>
+          <div class="c">▲ 12,4 % vs mai</div>
+        </div>
+        <div class="kpi">
+          <div class="t"><span class="d"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5fe6da" stroke-width="2"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/></svg></span>Donateurs actifs</div>
+          <div class="v">1 284</div>
+          <div class="c">▲ 8,1 % ce trimestre</div>
+        </div>
+        <div class="kpi hi">
+          <div class="t"><span class="d"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5fe6da" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 4v5h5"/></svg></span>Rétention donateurs</div>
+          <div class="v">71 %</div>
+          <div class="c">▲ +38 % vs an dernier</div>
+        </div>
+        <div class="kpi">
+          <div class="t"><span class="d"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5fe6da" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg></span>Don moyen</div>
+          <div class="v">42 €</div>
+          <div class="c b">● stable sur 6 mois</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Évolution des dons <span>6 derniers mois</span></h3>
+          <svg viewBox="0 0 760 250" width="100%" height="250" style="margin-top:6px">
+            <defs>
+              <linearGradient id="ar" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#2EA7A0" stop-opacity="0.38"/>
+                <stop offset="1" stop-color="#2EA7A0" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="ln" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#1F6F8B"/><stop offset="1" stop-color="#2EA7A0"/>
+              </linearGradient>
+            </defs>
+            <g stroke="#1c2628" stroke-width="1">
+              <line x1="40" y1="40" x2="740" y2="40"/><line x1="40" y1="95" x2="740" y2="95"/>
+              <line x1="40" y1="150" x2="740" y2="150"/><line x1="40" y1="205" x2="740" y2="205"/>
+            </g>
+            <g fill="#5a686c" font-size="11" font-family="Inter">
+              <text x="6" y="44">60k</text><text x="6" y="99">40k</text><text x="6" y="154">20k</text><text x="10" y="209">0</text>
+            </g>
+            <path d="M70 175 L182 150 L294 160 L406 110 L518 95 L630 62 L740 48 L740 205 L70 205 Z" fill="url(#ar)"/>
+            <path d="M70 175 L182 150 L294 160 L406 110 L518 95 L630 62 L740 48" fill="none" stroke="url(#ln)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <g fill="#0a0e0f" stroke="#2EA7A0" stroke-width="3">
+              <circle cx="70" cy="175" r="4.5"/><circle cx="182" cy="150" r="4.5"/><circle cx="294" cy="160" r="4.5"/><circle cx="406" cy="110" r="4.5"/><circle cx="518" cy="95" r="4.5"/><circle cx="630" cy="62" r="4.5"/><circle cx="740" cy="48" r="5.5" fill="#2EA7A0"/>
+            </g>
+            <g fill="#7f8d91" font-size="12" font-family="Inter" text-anchor="middle">
+              <text x="70" y="232">Jan</text><text x="182" y="232">Fév</text><text x="294" y="232">Mar</text><text x="406" y="232">Avr</text><text x="518" y="232">Mai</text><text x="630" y="232">Juin</text><text x="730" y="232">Juil</text>
+            </g>
+          </svg>
+          <div class="legend">
+            <span><i style="background:#2EA7A0"></i>Dons collectés <b>248 600 €</b></span>
+            <span><i style="background:#1F6F8B"></i>Objectif <b>225 000 €</b></span>
+            <span style="margin-left:auto;color:#37c79a;font-weight:700">+10,5 % au-dessus de l'objectif</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Répartition des dons</h3>
+          <div class="donut-wrap">
+            <div class="donut-c">
+              <svg width="150" height="150" viewBox="0 0 42 42">
+                <circle cx="21" cy="21" r="15.915" fill="none" stroke="#1b2426" stroke-width="6"/>
+                <circle cx="21" cy="21" r="15.915" fill="none" stroke="#2EA7A0" stroke-width="6" stroke-dasharray="54 46" stroke-dashoffset="25" stroke-linecap="round"/>
+                <circle cx="21" cy="21" r="15.915" fill="none" stroke="#1F6F8B" stroke-width="6" stroke-dasharray="30 70" stroke-dashoffset="-29" stroke-linecap="round"/>
+                <circle cx="21" cy="21" r="15.915" fill="none" stroke="#E5A100" stroke-width="6" stroke-dasharray="16 84" stroke-dashoffset="-59" stroke-linecap="round"/>
+              </svg>
+              <div class="ctr"><b>1 284</b><small>donateurs</small></div>
+            </div>
+            <div class="dl">
+              <div class="row"><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:#2EA7A0"></i>Mensuels <b>54 %</b></div>
+              <div class="row"><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:#1F6F8B"></i>Ponctuels <b>30 %</b></div>
+              <div class="row"><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:#E5A100"></i>Entreprises <b>16 %</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h3>Dons récents <span>Mise à jour il y a 2 min</span></h3>
+        <table>
+          <thead><tr><th>Donateur</th><th>Type</th><th>Campagne</th><th>Dernier don</th><th>Montant</th><th>Statut</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="donor"><div class="da" style="background:linear-gradient(135deg,#2EA7A0,#1F6F8B)">CM</div><div>Claire Moreau<small>claire.moreau@mail.fr</small></div></div></td>
+              <td><span class="tag m">Mensuel</span></td><td>Accès à l'eau</td><td>18 juin 2026</td><td class="stat">25 €</td><td><span class="dot"></span>Confirmé</td>
+            </tr>
+            <tr>
+              <td><div class="donor"><div class="da" style="background:linear-gradient(135deg,#E5A100,#BE4C00)">SF</div><div>Société Fontaine<small>don entreprise</small></div></div></td>
+              <td><span class="tag p">Ponctuel</span></td><td>Grand froid</td><td>18 juin 2026</td><td class="stat">1 500 €</td><td><span class="dot"></span>Confirmé</td>
+            </tr>
+            <tr>
+              <td><div class="donor"><div class="da" style="background:linear-gradient(135deg,#7621B0,#B600A8)">KD</div><div>Karim Dubois<small>karim.d@mail.fr</small></div></div></td>
+              <td><span class="tag m">Mensuel</span></td><td>Éducation</td><td>17 juin 2026</td><td class="stat">15 €</td><td><span class="dot"></span>Confirmé</td>
+            </tr>
+            <tr>
+              <td><div class="donor"><div class="da" style="background:linear-gradient(135deg,#2EA7A0,#37c79a)">AL</div><div>Aïcha Laurent<small>aicha.laurent@mail.fr</small></div></div></td>
+              <td><span class="tag p">Ponctuel</span></td><td>Urgence Sahel</td><td>17 juin 2026</td><td class="stat">80 €</td><td><span class="dot"></span>Confirmé</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
