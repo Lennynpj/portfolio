@@ -10,10 +10,11 @@ const SPECS: { variant: MockVariant; accent: string; accent2: string }[] = [
   { variant: 'landing', accent: '#7621B0', accent2: '#B600A8' },
 ]
 
-/** Captures réelles disponibles, indexées par nom de projet. */
-const SHOT: Record<string, string> = Object.fromEntries(
-  projects.filter((p) => p.screenshot).map((p) => [p.name, p.screenshot as string]),
-)
+/** Captures réelles indexées par libellé : projets + mini-apps de démo (UX/UI…). */
+const SHOT: Record<string, string> = {
+  ...Object.fromEntries(projects.filter((p) => p.screenshot).map((p) => [p.name, p.screenshot as string])),
+  'UX/UI': '/projects/uxui.jpg',
+}
 
 const TILE = 'shrink-0 w-[300px] h-[195px] sm:w-[420px] sm:h-[270px] rounded-2xl'
 

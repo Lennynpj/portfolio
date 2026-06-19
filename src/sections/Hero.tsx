@@ -40,7 +40,7 @@ export default function Hero() {
       </FadeIn>
 
       {/* Titre géant */}
-      <div className="relative z-0 flex-1 flex items-center overflow-hidden px-4 md:px-8">
+      <div className="relative z-0 flex-1 flex items-center overflow-hidden px-4 md:px-8 -translate-y-[6vh] sm:-translate-y-[7vh]">
         <FadeIn
           as="h1"
           y={40}

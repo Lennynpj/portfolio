@@ -30,7 +30,14 @@ export default function CountUp({ value, className, style }: Props) {
       if (p < 1) raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
+    // Filet de sécurité : si requestAnimationFrame est throttlé (onglet en
+    // arrière-plan / scroll rapide), forcer la valeur finale pour ne jamais
+    // rester bloqué sur un chiffre partiel ("0h", "0.1/5"…).
+    const safety = setTimeout(() => setN(target), dur + 250)
+    return () => {
+      cancelAnimationFrame(raf)
+      clearTimeout(safety)
+    }
   }, [inView, match, target])
 
   return (

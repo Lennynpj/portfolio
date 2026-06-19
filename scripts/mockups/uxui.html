@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440, initial-scale=1" />
+<title>HumanX — Design Studio</title>
+<style>
+  :root{
+    --bg:#0f0f14; --chrome:#16161d; --panel:#191921; --panel2:#1f1f29; --line:#2a2a36;
+    --txt:#e9ecf2; --mut:#8b91a3; --mut2:#5d6376;
+    --vio:#8B5CF6; --pink:#B600A8; --acc:#7C3AED; --blue:#5B6CF0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{width:1440px;height:900px;overflow:hidden;background:var(--bg);color:var(--txt);
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+  /* top toolbar */
+  .top{height:52px;flex:none;background:var(--chrome);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 16px}
+  .logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--vio),var(--pink));display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:15px}
+  .tools{display:flex;gap:4px;margin-left:6px}
+  .tool{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:var(--mut)}
+  .tool.on{background:rgba(139,92,246,.18);color:#c4b5fd;box-shadow:inset 0 0 0 1px rgba(139,92,246,.35)}
+  .file{margin-left:8px;font-size:13.5px;color:var(--mut)}
+  .file b{color:var(--txt);font-weight:600}
+  .sp{flex:1}
+  .zoom{font-size:12.5px;color:var(--mut);border:1px solid var(--line);border-radius:8px;padding:6px 11px}
+  .avs{display:flex}
+  .av{width:30px;height:30px;border-radius:50%;border:2px solid var(--chrome);margin-left:-8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
+  .share{height:34px;padding:0 16px;border-radius:9px;background:linear-gradient(135deg,var(--vio),var(--acc));color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;border:none}
+  /* body */
+  .work{flex:1;display:flex;min-height:0}
+  .left{width:236px;flex:none;background:var(--panel);border-right:1px solid var(--line);padding:14px 0;overflow:hidden}
+  .sec{padding:7px 16px;color:var(--mut2);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between}
+  .layer{display:flex;align-items:center;gap:9px;padding:7px 16px 7px 20px;font-size:13px;color:var(--mut)}
+  .layer.sel{background:rgba(139,92,246,.12);color:#ddd6fe;box-shadow:inset 2px 0 0 var(--vio)}
+  .layer.ind{padding-left:36px}
+  .layer.ind2{padding-left:52px}
+  .layer svg{opacity:.8;flex:none}
+  .assets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px 16px}
+  .asset{aspect-ratio:1;border-radius:9px;border:1px solid var(--line)}
+  /* canvas */
+  .canvas{flex:1;position:relative;background:
+    radial-gradient(circle at 1px 1px, #20202b 1px, transparent 0) 0 0/22px 22px,
+    #0c0c11;overflow:hidden}
+  .board{position:absolute;display:flex;flex-direction:column}
+  .board .bt{font-size:12px;color:var(--mut);margin-bottom:9px;font-weight:600;display:flex;align-items:center;gap:7px}
+  .board .bt .dotv{width:8px;height:8px;border-radius:2px;background:var(--vio)}
+  .phone{width:280px;height:580px;border-radius:34px;background:#0e0e14;box-shadow:0 30px 80px rgba(0,0,0,.5);overflow:hidden;position:relative;border:1px solid #26263200}
+  .sel{outline:2px solid var(--vio);outline-offset:3px;border-radius:36px}
+  .badge{position:absolute;top:-26px;left:0;background:var(--vio);color:#fff;font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px}
+  .meas{position:absolute;color:#c4b5fd;font-size:10px}
+  /* app screen 1 : wallet */
+  .scr{height:100%;display:flex;flex-direction:column;color:#fff}
+  .notch{height:34px;display:flex;align-items:center;justify-content:space-between;padding:10px 22px 0;font-size:11px;color:#fff;font-weight:600}
+  .w-top{padding:6px 22px 0;display:flex;align-items:center;justify-content:space-between}
+  .w-top .hi{font-size:12px;color:#b9bbd0}.w-top .nm{font-size:16px;font-weight:700}
+  .w-top .pf{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#B600A8)}
+  .card{margin:16px 18px 0;border-radius:22px;padding:20px;background:linear-gradient(135deg,#7C3AED,#B600A8);position:relative;overflow:hidden}
+  .card::after{content:"";position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.12)}
+  .card .lab{font-size:11px;color:rgba(255,255,255,.8)}
+  .card .bal{font-size:30px;font-weight:800;margin-top:4px}
+  .card .num{font-size:12px;letter-spacing:2px;margin-top:18px;color:rgba(255,255,255,.92)}
+  .qa{display:flex;justify-content:space-between;padding:18px 24px 6px}
+  .qa .q{display:flex;flex-direction:column;align-items:center;gap:7px;font-size:10.5px;color:#b9bbd0}
+  .qa .qi{width:46px;height:46px;border-radius:14px;background:#1b1b26;display:flex;align-items:center;justify-content:center}
+  .sec2{display:flex;align-items:center;justify-content:space-between;padding:12px 22px 8px}
+  .sec2 b{font-size:13px}.sec2 span{font-size:11px;color:var(--vio)}
+  .tx{display:flex;align-items:center;gap:12px;padding:9px 22px}
+  .tx .ic{width:40px;height:40px;border-radius:13px;background:#1b1b26;flex:none;display:flex;align-items:center;justify-content:center}
+  .tx .nm{font-size:13px;font-weight:600}.tx .dt{font-size:10.5px;color:#7c7f96}
+  .tx .am{margin-left:auto;font-weight:700;font-size:13.5px}
+  .tx .am.pos{color:#37c79a}
+  .tab{margin-top:auto;height:64px;background:#13131b;border-top:1px solid #20202b;display:flex;align-items:center;justify-content:space-around}
+  .tab .ti{width:24px;height:24px;border-radius:7px;background:#2a2a38}
+  .tab .ti.on{background:linear-gradient(135deg,#8B5CF6,#B600A8)}
+  /* app screen 2 : stats */
+  .s2{padding:0 20px;color:#fff}
+  .s2 h{display:block;font-size:18px;font-weight:700;margin:8px 0 2px}
+  .s2 .sub{font-size:11px;color:#9698b0}
+  .ring{display:flex;justify-content:center;margin:22px 0}
+  .stat2{display:flex;gap:12px;margin-top:6px}
+  .stat2 .b{flex:1;background:#16161f;border-radius:16px;padding:14px}
+  .stat2 .b .v{font-size:20px;font-weight:800}
+  .stat2 .b .l{font-size:10px;color:#8b8da3;margin-top:3px}
+  .bars{display:flex;align-items:flex-end;gap:10px;height:120px;padding:18px 4px 0}
+  .bars .bar{flex:1;border-radius:7px 7px 0 0;background:#23232f}
+  .bars .bar.hi{background:linear-gradient(180deg,#8B5CF6,#7C3AED)}
+  /* right panel */
+  .right{width:248px;flex:none;background:var(--panel);border-left:1px solid var(--line);padding:0;overflow:hidden;font-size:12.5px}
+  .rh{padding:12px 16px;border-bottom:1px solid var(--line);display:flex;gap:8px}
+  .rh .seg{flex:1;text-align:center;padding:6px;border-radius:8px;color:var(--mut);font-size:12px}
+  .rh .seg.on{background:var(--panel2);color:var(--txt)}
+  .rg{padding:14px 16px;border-bottom:1px solid var(--line)}
+  .rg .t{color:var(--mut2);font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:11px;display:flex;align-items:center;justify-content:space-between}
+  .row{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+  .inp{background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:6px 9px;color:var(--txt);font-size:12px;flex:1}
+  .sw{width:22px;height:22px;border-radius:6px;border:1px solid var(--line)}
+  .pal{display:flex;gap:7px;flex-wrap:wrap}
+  .pal .c{width:30px;height:30px;border-radius:8px;border:1px solid rgba(255,255,255,.08)}
+  .comp{display:flex;gap:8px;flex-wrap:wrap}
+  .comp .k{width:48px;height:34px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:10px}
+  .type .r{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;color:var(--txt)}
+  .type .r small{color:var(--mut2);font-size:11px}
+</style>
+</head>
+<body>
+  <div class="top">
+    <div class="logo">H</div>
+    <div class="tools">
+      <div class="tool on"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3l16 8-7 2-2 7z"/></svg></div>
+      <div class="tool"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/></svg></div>
+      <div class="tool"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/></svg></div>
+      <div class="tool"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20l4-1L19 8l-3-3L5 16z"/></svg></div>
+      <div class="tool"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 7h14M5 12h14M5 17h9"/></svg></div>
+    </div>
+    <div class="file">HumanX&nbsp;/&nbsp;<b>Design System v2.4</b></div>
+    <div class="sp"></div>
+    <div class="zoom">128 %</div>
+    <div class="avs">
+      <div class="av" style="background:linear-gradient(135deg,#8B5CF6,#B600A8)">L</div>
+      <div class="av" style="background:linear-gradient(135deg,#5B6CF0,#2EA7A0)">G</div>
+      <div class="av" style="background:#2a2a38;color:#9aa">+3</div>
+    </div>
+    <button class="share"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.5 13.5l7 4M15.5 6.5l-7 4"/></svg>Partager</button>
+  </div>
+
+  <div class="work">
+    <!-- left -->
+    <aside class="left">
+      <div class="sec">Calques</div>
+      <div class="layer sel"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/></svg>📱 Wallet — Accueil</div>
+      <div class="layer ind"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>Header</div>
+      <div class="layer ind2">Avatar</div>
+      <div class="layer ind2">Greeting</div>
+      <div class="layer ind"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/></svg>Balance Card</div>
+      <div class="layer ind"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Transactions</div>
+      <div class="layer ind"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="16" width="18" height="5" rx="2"/></svg>Tab Bar</div>
+      <div class="layer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/></svg>📱 Wallet — Stats</div>
+      <div class="sec" style="margin-top:8px">Composants</div>
+      <div class="assets">
+        <div class="asset" style="background:linear-gradient(135deg,#8B5CF6,#B600A8)"></div>
+        <div class="asset" style="background:#1f1f29"></div>
+        <div class="asset" style="background:linear-gradient(135deg,#5B6CF0,#7C3AED)"></div>
+        <div class="asset" style="background:#1f1f29"></div>
+        <div class="asset" style="background:#1f1f29"></div>
+        <div class="asset" style="background:linear-gradient(135deg,#2EA7A0,#5B6CF0)"></div>
+        <div class="asset" style="background:#1f1f29"></div>
+        <div class="asset" style="background:#1f1f29"></div>
+      </div>
+    </aside>
+
+    <!-- canvas -->
+    <div class="canvas">
+      <!-- board 1 selected -->
+      <div class="board" style="left:70px;top:54px">
+        <div class="bt"><span class="dotv"></span>Wallet — Accueil &nbsp;·&nbsp; 280 × 580</div>
+        <div class="phone sel">
+          <div class="badge">Frame</div>
+          <div class="scr">
+            <div class="notch"><span>9:41</span><span>● ● ▰</span></div>
+            <div class="w-top"><div><div class="hi">Bonjour 👋</div><div class="nm">Lenny</div></div><div class="pf"></div></div>
+            <div class="card">
+              <div class="lab">Solde disponible</div>
+              <div class="bal">8 540,20 €</div>
+              <div class="num">**** **** **** 4921</div>
+            </div>
+            <div class="qa">
+              <div class="q"><div class="qi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>Ajouter</div>
+              <div class="q"><div class="qi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>Envoyer</div>
+              <div class="q"><div class="qi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/></svg></div>Scanner</div>
+              <div class="q"><div class="qi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 12h6"/></svg></div>Plus</div>
+            </div>
+            <div class="sec2"><b>Transactions</b><span>Voir tout</span></div>
+            <div class="tx"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9698b0" stroke-width="2"><path d="M6 2h9l3 3v17H6z"/></svg></div><div><div class="nm">Spotify</div><div class="dt">Aujourd'hui · 14:05</div></div><div class="am">-9,99 €</div></div>
+            <div class="tx"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#37c79a" stroke-width="2"><path d="M12 5v14M5 12l7-7 7 7"/></svg></div><div><div class="nm">Virement reçu</div><div class="dt">Hier · 09:20</div></div><div class="am pos">+250,00 €</div></div>
+            <div class="tx"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9698b0" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="18" cy="21" r="1"/><path d="M3 4h2l2 12h11l2-8H6"/></svg></div><div><div class="nm">Carrefour</div><div class="dt">Hier · 18:40</div></div><div class="am">-43,10 €</div></div>
+            <div class="tab"><div class="ti on"></div><div class="ti"></div><div class="ti"></div><div class="ti"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- board 2 -->
+      <div class="board" style="left:430px;top:54px">
+        <div class="bt"><span class="dotv" style="background:#5d6376"></span>Wallet — Stats &nbsp;·&nbsp; 280 × 580</div>
+        <div class="phone">
+          <div class="scr">
+            <div class="notch"><span>9:41</span><span>● ● ▰</span></div>
+            <div class="s2">
+              <h>Statistiques</h>
+              <div class="sub">Vos dépenses · Juin 2026</div>
+              <div class="stat2">
+                <div class="b"><div class="v" style="color:#c4b5fd">1 240 €</div><div class="l">Dépensé</div></div>
+                <div class="b"><div class="v" style="color:#37c79a">2 480 €</div><div class="l">Économisé</div></div>
+              </div>
+              <div class="bars">
+                <div class="bar" style="height:42%"></div><div class="bar" style="height:64%"></div>
+                <div class="bar hi" style="height:88%"></div><div class="bar" style="height:54%"></div>
+                <div class="bar" style="height:72%"></div><div class="bar" style="height:38%"></div>
+                <div class="bar" style="height:60%"></div>
+              </div>
+              <div class="sec2" style="padding-left:0;padding-right:0"><b>Catégories</b><span>Juin</span></div>
+              <div class="tx" style="padding-left:0"><div class="ic" style="background:linear-gradient(135deg,#8B5CF6,#B600A8)"></div><div><div class="nm">Abonnements</div><div class="dt">8 actifs</div></div><div class="am">-72 €</div></div>
+              <div class="tx" style="padding-left:0"><div class="ic" style="background:linear-gradient(135deg,#5B6CF0,#2EA7A0)"></div><div><div class="nm">Courses</div><div class="dt">22 paiements</div></div><div class="am">-318 €</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- measurement hint -->
+      <div class="meas" style="left:70px;top:640px">↔ 280</div>
+    </div>
+
+    <!-- right -->
+    <aside class="right">
+      <div class="rh"><div class="seg on">Design</div><div class="seg">Prototype</div></div>
+      <div class="rg">
+        <div class="t">Alignement</div>
+        <div class="row" style="justify-content:space-between">
+          <div class="comp"><div class="k">⊢</div><div class="k">⊣</div><div class="k">≡</div><div class="k">⊥</div></div>
+        </div>
+      </div>
+      <div class="rg">
+        <div class="t">Remplissage <span style="color:var(--mut)">+</span></div>
+        <div class="row"><div class="sw" style="background:linear-gradient(135deg,#7C3AED,#B600A8)"></div><div class="inp">Linéaire · 135°</div></div>
+        <div class="row"><div class="sw" style="background:#8B5CF6"></div><input class="inp" value="#8B5CF6"/></div>
+      </div>
+      <div class="rg type">
+        <div class="t">Typographie</div>
+        <div class="r"><span style="font-size:17px;font-weight:800">Aa</span><small>Inter · Bold · 30</small></div>
+        <div class="r"><span style="font-size:13px;font-weight:500">Aa</span><small>Inter · Medium · 14</small></div>
+      </div>
+      <div class="rg">
+        <div class="t">Styles de couleur</div>
+        <div class="pal">
+          <div class="c" style="background:#8B5CF6"></div><div class="c" style="background:#B600A8"></div>
+          <div class="c" style="background:#7C3AED"></div><div class="c" style="background:#5B6CF0"></div>
+          <div class="c" style="background:#2EA7A0"></div><div class="c" style="background:#37c79a"></div>
+          <div class="c" style="background:#0f0f14"></div><div class="c" style="background:#e9ecf2"></div>
+        </div>
+      </div>
+      <div class="rg">
+        <div class="t">Composants</div>
+        <div class="comp">
+          <div class="k" style="color:#c4b5fd">Btn</div><div class="k">Card</div><div class="k">Input</div>
+          <div class="k">Tab</div><div class="k">Chip</div><div class="k">Nav</div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</body>
+</html>
