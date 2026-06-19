@@ -1,0 +1,33 @@
+{
+  "nav": {
+    "about": "About",
+    "services": "Services",
+    "projects": "Projects",
+    "contact": "Contact"
+  },
+  "cta": {
+    "contact": "Start a project",
+    "live": "Live project"
+  },
+  "hero": {
+    "heading": "HUMANX",
+    "tagline": "a studio turning your digital ambitions into high-performing products — from idea to deployment"
+  },
+  "about": {
+    "title": "The studio",
+    "body": "For more than five years we've been crafting custom web and mobile products. Websites, apps, SaaS platforms, AI — honest advice, tailored proposals, and one obsession: measurable results. Let's build something incredible together."
+  },
+  "services": { "title": "Services" },
+  "projects": { "title": "Projects" },
+  "stats": { "title": "By the numbers" },
+  "testimonials": { "title": "Trusted by founders" },
+  "contact": {
+    "title": "Let's talk",
+    "subtitle": "Got a project in mind? We reply within 24h.",
+    "email": "Email us",
+    "name": "Name",
+    "emailField": "Email",
+    "message": "Your message",
+    "send": "Send"
+  }
+}

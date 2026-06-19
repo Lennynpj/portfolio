@@ -1,0 +1,33 @@
+{
+  "nav": {
+    "about": "À propos",
+    "services": "Services",
+    "projects": "Projets",
+    "contact": "Contact"
+  },
+  "cta": {
+    "contact": "Démarrer un projet",
+    "live": "Voir le projet"
+  },
+  "hero": {
+    "heading": "HUMANX",
+    "tagline": "studio qui transforme vos ambitions numériques en produits performants — de l'idée au déploiement"
+  },
+  "about": {
+    "title": "L'agence",
+    "body": "Depuis plus de cinq ans, nous concevons des produits web et mobiles sur mesure. Sites, apps, plateformes SaaS, IA — du conseil honnête, des propositions adaptées, et une obsession : des résultats mesurables. Construisons quelque chose d'incroyable ensemble."
+  },
+  "services": { "title": "Services" },
+  "projects": { "title": "Projets" },
+  "stats": { "title": "En chiffres" },
+  "testimonials": { "title": "Ils nous font confiance" },
+  "contact": {
+    "title": "Parlons-en",
+    "subtitle": "Un projet en tête ? Réponse sous 24 h.",
+    "email": "Nous écrire",
+    "name": "Nom",
+    "emailField": "Email",
+    "message": "Votre message",
+    "send": "Envoyer"
+  }
+}
