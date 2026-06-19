@@ -33,11 +33,11 @@ const ROW1 = [
 ]
 const ROW2 = [
   'EventPics',
-  'TipsYou',
-  'Get5Stars',
   'UX/UI',
-  'Steven Coaching',
+  'Get5Stars',
+  'TipsYou',
   'Dashboard',
+  'Steven Coaching',
   'Paiements',
   'API',
   'Conversion',
