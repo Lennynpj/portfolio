@@ -88,34 +88,36 @@ export default function ProjectCard({ project, i, progress, range, targetScale }
             />
           </div>
         ) : (
-          <div className="mt-5 md:mt-7 grid grid-cols-1 gap-3 md:grid-cols-[40%_1fr] md:gap-4">
-            <div className="flex flex-col gap-3 md:gap-4">
+          /* Hauteur fixe (identique à la capture) → les mockups remplissent la boîte
+             au lieu de dicter sa hauteur, donc la carte ne déborde plus. */
+          <div className="mt-5 md:mt-7 overflow-hidden" style={{ height: 'clamp(240px,36vw,540px)' }}>
+            <div className="flex h-full gap-3 md:gap-4">
+              {/* Colonne de widgets — masquée en mobile pour ne pas dépasser */}
+              <div className="hidden md:flex md:w-[38%] h-full flex-col gap-4">
+                <ProjectMock
+                  variant={project.variant}
+                  accent={project.accent}
+                  accent2={project.accent2}
+                  part="widgetA"
+                  className="w-full flex-1 min-h-0 rounded-[30px] md:rounded-[40px]"
+                />
+                <ProjectMock
+                  variant={project.variant}
+                  accent={project.accent}
+                  accent2={project.accent2}
+                  part="widgetB"
+                  className="w-full flex-1 min-h-0 rounded-[30px] md:rounded-[40px]"
+                />
+              </div>
               <ProjectMock
                 variant={project.variant}
                 accent={project.accent}
                 accent2={project.accent2}
-                part="widgetA"
-                className="w-full rounded-[22px] sm:rounded-[30px] md:rounded-[40px]"
-                style={{ height: 'clamp(120px,14vw,200px)' }}
-              />
-              <ProjectMock
-                variant={project.variant}
-                accent={project.accent}
-                accent2={project.accent2}
-                part="widgetB"
-                className="w-full rounded-[22px] sm:rounded-[30px] md:rounded-[40px]"
-                style={{ height: 'clamp(150px,20vw,300px)' }}
+                part="hero"
+                label={project.name}
+                className="flex-1 h-full min-h-0 rounded-[22px] sm:rounded-[30px] md:rounded-[40px]"
               />
             </div>
-            <ProjectMock
-              variant={project.variant}
-              accent={project.accent}
-              accent2={project.accent2}
-              part="hero"
-              label={project.name}
-              className="w-full rounded-[22px] sm:rounded-[30px] md:rounded-[40px]"
-              style={{ height: '100%', minHeight: 'clamp(290px,34vw,520px)' }}
-            />
           </div>
         )}
       </motion.div>
