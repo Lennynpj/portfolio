@@ -21,6 +21,14 @@ export default function CountUp({ value, className, style }: Props) {
 
   useEffect(() => {
     if (!inView || !match) return
+    // Mobile / reduced-motion : pas d'animation per-frame (saccades + charge
+    // thread pendant le scroll) → on affiche directement la valeur finale.
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const isTouch = window.matchMedia('(pointer: coarse)').matches
+    if (reduced || isTouch) {
+      setN(target)
+      return
+    }
     let raf = 0
     const start = performance.now()
     const dur = 1200

@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useRef, type CSSProperties } from 'react'
+import { Suspense, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
@@ -55,12 +55,27 @@ interface Props {
 }
 
 export default function HeroHeads({ className, style }: Props) {
+  const wrapRef = useRef<HTMLDivElement>(null)
+  // Met le canvas en pause quand le hero est hors écran → plus aucun calcul
+  // 3D pendant qu'on parcourt le reste de la page (gros gain mobile).
+  const [active, setActive] = useState(true)
+  useEffect(() => {
+    const el = wrapRef.current
+    if (!el) return
+    const io = new IntersectionObserver(([e]) => setActive(e.isIntersecting), {
+      rootMargin: '120px',
+    })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
   return (
-    <div className={className} style={style}>
+    <div ref={wrapRef} className={className} style={style}>
       <Canvas
+        frameloop={active ? 'always' : 'never'}
         camera={{ position: [0, 0.05, 6], fov: 34 }}
-        dpr={[1, 2]}
-        gl={{ alpha: true, antialias: true }}
+        dpr={[1, 1.5]}
+        gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}
         style={{ background: 'transparent' }}
       >
         <ambientLight intensity={1.1} />

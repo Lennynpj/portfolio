@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import ProjectMock from '../components/ProjectMock'
 import { projects, type MockVariant } from '../data/projects'
 
@@ -70,20 +70,33 @@ function Tile({ label, seed }: { label: string; seed: number }) {
   )
 }
 
-/** Deux rangées d'aperçus qui défilent selon le scroll (repris du template Jack). */
+/** Deux rangées d'aperçus qui défilent selon le scroll (repris du template Jack).
+ *  Le décalage est écrit directement dans le DOM (refs + rAF, translate3d GPU),
+ *  sans re-render React → scroll fluide même sur mobile. */
 export default function Marquee() {
   const ref = useRef<HTMLDivElement>(null)
-  const [offset, setOffset] = useState(0)
+  const row1 = useRef<HTMLDivElement>(null)
+  const row2 = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const onScroll = () => {
+    let ticking = false
+    const update = () => {
+      ticking = false
       const el = ref.current
-      if (!el) return
+      if (!el || !row1.current || !row2.current) return
       const top = el.getBoundingClientRect().top + window.scrollY
-      setOffset((window.scrollY - top + window.innerHeight) * 0.3)
+      const offset = (window.scrollY - top + window.innerHeight) * 0.3
+      row1.current.style.transform = `translate3d(${offset - 200}px,0,0)`
+      row2.current.style.transform = `translate3d(${-(offset - 200)}px,0,0)`
+    }
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true
+        requestAnimationFrame(update)
+      }
     }
     window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
+    update()
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
@@ -93,18 +106,12 @@ export default function Marquee() {
   return (
     <section ref={ref} className="bg-ink pt-24 sm:pt-32 md:pt-40 pb-10 overflow-hidden">
       <div className="flex flex-col gap-3">
-        <div
-          className="flex gap-3"
-          style={{ transform: `translateX(${offset - 200}px)`, willChange: 'transform' }}
-        >
+        <div ref={row1} className="flex gap-3" style={{ willChange: 'transform' }}>
           {r1.map((l, i) => (
             <Tile key={`a${i}`} label={l} seed={i} />
           ))}
         </div>
-        <div
-          className="flex gap-3"
-          style={{ transform: `translateX(${-(offset - 200)}px)`, willChange: 'transform' }}
-        >
+        <div ref={row2} className="flex gap-3" style={{ willChange: 'transform' }}>
           {r2.map((l, i) => (
             <Tile key={`b${i}`} label={l} seed={i + 3} />
           ))}
