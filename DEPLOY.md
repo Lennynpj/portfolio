@@ -87,21 +87,34 @@ Repère l'image/port :
 2. Décommente/adapte les `labels` (entrypoint `websecure`, `certresolver` = le tien).
 3. `docker compose up -d`. Traefik détecte le conteneur et émet le certificat.
 
-### C. Caddy
-Ajoute au `Caddyfile` :
+### C. Caddy  ← **setup actuel de ce VPS**
+Caddy tourne en conteneur (`eventpics-caddy`) sur le réseau `eventpics-net`, Caddyfile
+monté depuis `/home/debian/eventpics/deploy/Caddyfile`. Le `docker-compose.yml` attache
+déjà `humanx-portfolio` à `eventpics-net`, donc Caddy le joint par son nom.
+
+Ajoute ce bloc à `/home/debian/eventpics/deploy/Caddyfile` :
 ```caddy
+# ─── HumanX Portfolio ──────────────────────────────────────────────────
 portfolio.humanx-group.com {
-    reverse_proxy localhost:8088
+    encode zstd gzip
+    header {
+        Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        Referrer-Policy strict-origin-when-cross-origin
+        -Server
+        -X-Powered-By
+    }
+    reverse_proxy humanx-portfolio:80 {
+        header_up Host {host}
+    }
 }
 ```
-(si Caddy tourne en conteneur : `reverse_proxy humanx-portfolio:80` sur réseau partagé, ou `<IP_VPS>:8088`).
-Puis recharge :
+Puis valide + recharge sans coupure (Caddy émet le certificat tout seul) :
 ```bash
-caddy reload --config /etc/caddy/Caddyfile        # Caddy sur l'hôte
-# ou
-docker exec <conteneur_caddy> caddy reload --config /etc/caddy/Caddyfile
+docker exec eventpics-caddy caddy validate --config /etc/caddy/Caddyfile
+docker exec eventpics-caddy caddy reload  --config /etc/caddy/Caddyfile
 ```
-Caddy obtient/renouvelle le certificat automatiquement.
 
 ### D. nginx sur l'hôte + certbot
 `/etc/nginx/sites-available/portfolio.humanx-group.com` :
