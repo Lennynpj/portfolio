@@ -83,10 +83,9 @@ export default function Contact() {
         <a
           href={`mailto:${EMAIL}`}
           aria-label="Email"
-          className="flex items-center gap-2 text-[#D7E2EA]/60 hover:text-[#D7E2EA] transition-colors"
+          className="text-[#D7E2EA]/60 hover:text-[#D7E2EA] transition-colors"
         >
           <Mail size={20} />
-          <span className="text-sm">{EMAIL}</span>
         </a>
         <span className="text-[#D7E2EA]/40 text-sm">© 2026 HumanX</span>
       </footer>
