@@ -1,10 +1,9 @@
 import { useState, type FormEvent } from 'react'
-import { Github, Instagram, Linkedin, Mail } from 'lucide-react'
+import { Mail } from 'lucide-react'
 import FadeIn from '../components/FadeIn'
 import { useLanguage } from '../lib/language'
 
-// TODO: remplacer par la vraie adresse de contact.
-const EMAIL = 'contact@humanx-group.com'
+const EMAIL = 'lennygabriel03@gmail.com'
 
 const fieldClass =
   'w-full bg-white/[0.03] border border-[#D7E2EA]/15 rounded-2xl px-5 py-4 text-[#D7E2EA] placeholder:text-[#D7E2EA]/35 outline-none focus:border-[#D7E2EA]/40 transition-colors'
@@ -81,20 +80,14 @@ export default function Contact() {
 
       <footer className="max-w-6xl mx-auto mt-20 pt-8 border-t border-[#D7E2EA]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
         <span className="text-[#D7E2EA] font-black uppercase tracking-tight text-xl">HumanX</span>
-        <div className="flex items-center gap-5 text-[#D7E2EA]/60">
-          <a href={`mailto:${EMAIL}`} aria-label="Email" className="hover:text-[#D7E2EA] transition-colors">
-            <Mail size={20} />
-          </a>
-          <a href="#" aria-label="LinkedIn" className="hover:text-[#D7E2EA] transition-colors">
-            <Linkedin size={20} />
-          </a>
-          <a href="#" aria-label="GitHub" className="hover:text-[#D7E2EA] transition-colors">
-            <Github size={20} />
-          </a>
-          <a href="#" aria-label="Instagram" className="hover:text-[#D7E2EA] transition-colors">
-            <Instagram size={20} />
-          </a>
-        </div>
+        <a
+          href={`mailto:${EMAIL}`}
+          aria-label="Email"
+          className="flex items-center gap-2 text-[#D7E2EA]/60 hover:text-[#D7E2EA] transition-colors"
+        >
+          <Mail size={20} />
+          <span className="text-sm">{EMAIL}</span>
+        </a>
         <span className="text-[#D7E2EA]/40 text-sm">© 2026 HumanX</span>
       </footer>
     </section>
